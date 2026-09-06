@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Animator Playback for YouTube",
+    "version": "1.0.0",
+    "description": "Frame-by-frame playback, flipping, and grid-analysis for animators.",
+    "content_scripts": [
+        {
+            "matches": ["https://www.youtube.com/*"],
+            "js": ["content.js"],
+            "run_at": "document_idle"
+        }
+    ]
+}
+    
