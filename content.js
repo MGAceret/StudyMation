@@ -7,16 +7,26 @@ function getVideo() {
 let myVideo = getVideo();
 
 let container = document.createElement("div");
-container.textContent = "Animator Playback!"
+container.className = "playback-hud";
+container.textContent = "Animator-Playback!";
 
-container.style.zIndex = "999";
-container.style.position = "absolute";
-container.style.width = "70%";
-container.style.height = "10%";
-container.style.backgroundColor = "black";
-container.style.border = "2px solid #00ffaa"
-container.style.borderRadius = "5px"
-container.style.top = "20px";
-container.style.left = "20px";
+
+const styleSheet = document.createElement("style");
+styleSheet.textContent = `
+    .playback-hud {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 40%;
+        height: 10%;
+        background: rgba(18,18,18,0.85);
+        border: 2px solid white;
+        border-radius: 5px;
+        z-index: 999;
+        color: white;
+    }
+`
+document.head.appendChild(styleSheet);
+
 
 document.getElementById("movie_player")?.append(container);
