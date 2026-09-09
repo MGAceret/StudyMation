@@ -139,3 +139,41 @@ grid.addEventListener("click", () => {
         gridOverlay.style.display = "none";
     }
 });
+
+// Frame Update 
+video.addEventListener("timeupdate", () => {
+    if (!video) return;
+    currentFrame.textContent = Math.floor(video.currentTime * 24);
+     
+});
+
+video.addEventListener("timeupdate", () => {
+    if (!video) return;
+    endFrame.textContent = " / " + Math.floor(video.duration * 24);
+});
+
+// Loop Start-End
+let loopStartTime = null;
+let loopEndTime = null;
+
+loopStart.addEventListener("click", () => {
+    if (!video) return;
+    loopStartTime = video.currentTime;
+    loopStart.textContent = "Start: " + loopStartTime.toFixed(2) + "s";
+});
+
+loopEnd.addEventListener("click", () => {
+    if (!video) return;
+    loopEndTime = video.currentTime;
+    loopEnd.textContent = "End: " + loopEndTime.toFixed(2) + "s";
+});
+
+// Loop Function
+video.addEventListener("timeupdate", () => {
+    if (!video) return;
+    if (loopStartTime !== null && loopEndTime !== null) {
+        if (video.currentTime >= loopEndTime) {
+            video.currentTime = loopStartTime;
+        }
+    }
+});
