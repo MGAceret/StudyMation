@@ -1,10 +1,10 @@
 function getVideo() {
-    let video = document.querySelector("video");
-    console.log("Video Fetched!", video);
-    return video;
+    let fetchVideo = document.querySelector("video");
+    console.log("Video Fetched!", fetchVideo);
+    return fetchVideo;
 }
 
-let myVideo = getVideo();
+const video = getVideo();
 
 let container = document.createElement("div");
 container.className = "playback-hud";
@@ -14,7 +14,7 @@ let control1 = document.createElement("div");
 let control2 = document.createElement("div");
 
 let play = document.createElement("button");
-play.textContent = "▶"
+play.textContent = "❚❚"
 let frameSkip = document.createElement("div");
 let frameCount= document.createElement("div");
 frameCount.textContent = "FRAMES: "
@@ -67,3 +67,75 @@ frameCount.append(currentFrame, endFrame);
 loop.append(loopStart, loopEnd);
 
 speedControl.append(speedQuarter, speedHalf, speedNormal)
+
+
+
+
+
+// Wiring / Functions
+
+// Play
+play.addEventListener("click", () => {
+    if (!video) return;
+    if (video.paused) {
+        video.play();
+        play.textContent = "❚❚"
+    } else {
+        video.pause();
+        play.textContent = "▶"
+    }
+});
+
+// FrameSkip
+function stepFrames (frames, fps = 24) {
+    if (!video) return;
+    video.pause();
+    video.currentTime += frames / fps;
+};
+
+minus5f.addEventListener("click", () => stepFrames(-5));
+minus1f.addEventListener("click", () => stepFrames(-1));
+plus1f.addEventListener("click", () => stepFrames(1));
+plus5f.addEventListener("click", () => stepFrames(5));
+
+
+// PlayBackSpeed
+function setSpeed (rate) {
+    if (!video) return;
+    video.playbackRate = rate;
+}
+
+speedQuarter.addEventListener("click", () => setSpeed(0.25));
+speedHalf.addEventListener("click", () => setSpeed(0.5));
+speedNormal.addEventListener("click", () => setSpeed(1.0));
+
+// Mirror
+mirror.addEventListener("click", () => {
+    if (!video) return;
+    if(video.style.transform === "scaleX(-1)") {
+        video.style.transform = "none";
+    } else {
+        video.style.transform = "scaleX(-1)";
+    }
+});
+
+// Grid Overlay
+let gridOverlay = document.createElement("div");
+gridOverlay.className = "animator-grid-overlay";
+gridOverlay.style.display = "none"; // Hidden by default
+
+// Grid Creation
+for (let i = 0; i < 9; i++) {
+    gridOverlay.append(document.createElement("div"));
+}
+
+document.getElementById("movie_player")?.append(gridOverlay);
+
+grid.addEventListener("click", () => {
+    if (!video) return;
+    if (gridOverlay.style.display === "none") {
+        gridOverlay.style.display = "grid";
+    } else {
+        gridOverlay.style.display = "none";
+    }
+});
