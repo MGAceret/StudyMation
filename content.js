@@ -9,7 +9,12 @@ const video = getVideo();
 let container = document.createElement("div");
 container.className = "playback-hud";
 
-let timeline = document.createElement("div");
+let timeline = document.createElement("input");
+timeline.type = "range";
+timeline.min = 0;
+timeline.value = 0;
+timeline.step = 0.01;
+
 let control1 = document.createElement("div");
 let control2 = document.createElement("div");
 
@@ -73,6 +78,19 @@ speedControl.append(speedQuarter, speedHalf, speedNormal)
 
 
 // Wiring / Functions
+
+// Timeline Scrubber Update
+video.addEventListener("timeupdate", () => {
+    if (!video) return;
+    timeline.value = video.currentTime;
+    timeline.max = video.duration || 100;
+});
+
+// Timeline Scrubber Drag
+timeline.addEventListener("input", () => {
+    if (!video) return;
+    video.currentTime = Number(timeline.value);
+});
 
 // Play
 play.addEventListener("click", () => {
