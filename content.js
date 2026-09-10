@@ -44,8 +44,10 @@ let endFrame = document.createElement("span");
 // loop buttons
 let loopStart = document.createElement("button");
 let loopEnd = document.createElement("button");
+let loopClear = document.createElement("button");
 loopStart.textContent = "Start: --";
 loopEnd.textContent = "End: --";
+loopClear.textContent = "Clear";
 
 let mirror = document.createElement("button");
 mirror.textContent = "Mirror [M]";
@@ -69,7 +71,7 @@ control2.append(mirror, grid, speedControl);
 
 frameSkip.append(minus5f, minus1f, plus1f, plus5f);
 frameCount.append(currentFrame, endFrame);
-loop.append(loopStart, loopEnd);
+loop.append(loopStart, loopEnd, loopClear);
 
 speedControl.append(speedQuarter, speedHalf, speedNormal)
 
@@ -83,7 +85,13 @@ speedControl.append(speedQuarter, speedHalf, speedNormal)
 video.addEventListener("timeupdate", () => {
     if (!video) return;
     timeline.value = video.currentTime;
-    timeline.max = video.duration || 100;
+    if (loopStartTime && loopEndTime) {
+        timeline.min = loopStartTime;
+        timeline.max = loopEndTime;
+    } else {
+        timeline.min = 0;
+        timeline.max = video.duration || 100;
+    }
 });
 
 // Timeline Scrubber Drag
@@ -193,5 +201,16 @@ video.addEventListener("timeupdate", () => {
         if (video.currentTime >= loopEndTime) {
             video.currentTime = loopStartTime;
         }
+    }
+});
+
+// Loop Clear
+loopClear.addEventListener("click", () => {
+    if (!video) return;
+    if (loopStartTime && loopEndTime) {
+        loopStartTime = null;
+        loopEndTime = null;
+        loopStart.textContent = "Start: --";
+        loopEnd.textContent = "End: --";
     }
 });
