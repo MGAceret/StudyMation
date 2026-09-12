@@ -10,21 +10,28 @@ let container = document.createElement("div");
 container.className = "playback-hud";
 
 let timeline = document.createElement("input");
+timeline.className = "timeline";
 timeline.type = "range";
 timeline.min = 0;
 timeline.value = 0;
 timeline.step = 0.01;
 
 let control1 = document.createElement("div");
+control1.className ="control1";
 let control2 = document.createElement("div");
+control2.className ="control2";
 
 let play = document.createElement("button");
 play.textContent = "❚❚"
+play.className = "play-btn";
 let frameSkip = document.createElement("div");
+frameSkip.className = "frame-skip"; // To be utilized with parent property (buttons)
 let frameCount= document.createElement("div");
-frameCount.textContent = "FRAMES: "
+frameCount.textContent = "FRAMES: ";
+frameCount.className = "frame-count";
 let loop = document.createElement("div");
-loop.textContent = "LOOP:"
+loop.textContent = "LOOP:"; 
+loop.className = "loop";// To be utilized with parent property (buttons)
 
 // frameSkip buttons
 let minus5f = document.createElement("button");
@@ -51,9 +58,12 @@ loopClear.textContent = "Clear";
 
 let mirror = document.createElement("button");
 mirror.textContent = "Mirror [M]";
+mirror.className = "mirror-btn";
 let grid = document.createElement("button");
 grid.textContent = "Grid [G]";
+grid.className = "grid-btn";
 let speedControl = document.createElement("div");
+speedControl.className = "speed-control"; // To be utilized with parent property (buttons)
 
 // speedControl buttons
 let speedQuarter = document.createElement("button");
