@@ -5,7 +5,7 @@ A browser extension (Manifest V3) designed for animators, dance analysts, and st
 
 ---
 
-## 🎯 Current Status (As of Sep 11, 2026)
+## 🎯 Current Status (As of Sep 14, 2026)
 
 ### ✅ Completed & Fully Functional Features:
 
@@ -14,12 +14,13 @@ A browser extension (Manifest V3) designed for animators, dance analysts, and st
    - Injects `content.js` and modular stylesheet `style/style.css` at `document_idle`.
 
 2. **DOM Structure & Injection (`content.js`)**:
-   - Injected into YouTube's `#movie_player` container for seamless fullscreen/theater mode support.
+   - Injected into YouTube's `#movie_player` container for fullscreen/theater mode inheritance.
    - Built full element hierarchy:
      - `container` (`.playback-hud`)
-       - `timeline` (`<input type="range">`)
+       - `timeline` (`<input type="range">`) with native `accent-color: #e9a42d`
        - `control1` (Row 1): `play`, `frameSkip` (`-5f`, `-1f`, `1f`, `5f`), `frameCount` (`currentFrame`, `endFrame`), `loop` (`loopStart`, `loopEnd`, `loopClear`)
        - `control2` (Row 2): `mirror`, `grid`, `speedControl` (`0.25x`, `0.5x`, `1.0x`)
+   - Added dedicated CSS class hooks: `currentFrame.className = "current-frame"` and `endFrame.className = "end-frame"`.
 
 3. **Core Interactive Engine (`content.js`)**:
    - **Play / Pause**: Toggles `video.play()` and `video.pause()` with synchronized `▶` and `❚❚` icons.
@@ -31,33 +32,47 @@ A browser extension (Manifest V3) designed for animators, dance analysts, and st
    - **A-B Range Looper**: Captures `loopStartTime` and `loopEndTime`, continuously loops playback within boundary on `timeupdate`, and resets with `loopClear`.
    - **Dynamic Time Scrubber**: `<input type="range">` with 2-way sync that automatically constrains `min`/`max` when an A-B loop is active and expands to `video.duration` when cleared.
 
-4. **Visual Design Reference**:
-   - Mockup stored in `ref/Animator-Playback.png`.
+4. **Visual Design & CSS Layout (`style/style.css`)**:
+   - Switched `.playback-hud` to `height: auto` to prevent vertical clipping of row 2 (`control2`).
+   - Play button styled with a 45px circular amber accent (`#e9a42d`).
+   - Grouped pill containers (`.frame-skip`, `.frame-count`, `.loop`, `.speed-control`) styled with `#202020` backgrounds and `#616161` buttons.
+   - Button spacing handled via `:not(:last-child)` margins.
+   - Two-tone frame counter readout styled: `.current-frame` in amber (`#e9a42d`) and `.end-frame` in muted grey (`#616161`).
+   - `:active` click feedback added for `.mirror-btn` and `.grid-btn`.
+   - Reference mockup: `ref/Animator-Playback.png`.
 
 ---
 
 ## 🚀 Next Steps (When Resuming on Other Device)
 
-### Phase 1: CSS Layout & Visual Polish (`style/style.css`)
-- Assign class names (`className`) to inner button groups and rows in `content.js` to enable granular CSS targeting.
-- Style `.playback-hud` with Flexbox column layout (`gap`, dark semi-transparent card background `#111111`, border radius).
-- Style `control1` and `control2` as horizontal flex rows with dividers.
-- Style button groups (`frameSkip`, `frameCount`, `loop`, `speedControl`) with dark slate pill containers (`#2a2a2a`).
-- Style the circular Play button (amber accent `#f5a623`) and active state highlights matching `ref/Animator-Playback.png`.
+### Phase 1: CSS Quick Polish (Optional Finishing Touches)
+- [ ] **`.loop` Alignment:** Add `display: flex; align-items: center;` to `.loop` in `style/style.css` so `gap: 5px` properly spaces the `"LOOP:"` text and buttons on the same baseline.
+- [ ] **`.frame-skip button` Sizing:** Change fixed `width: 25px` to `min-width: 25px; width: auto; padding: 2px 6px;` if `-5f` / `+5f` text feels cramped.
+- [ ] **Numeric Jitter Prevention:** Add `font-variant-numeric: tabular-nums;` to `.frame-count` so the counter doesn't vibrate horizontally during playback.
+- [ ] **Icon Centering:** Add `display: flex; justify-content: center; align-items: center;` to `.play-btn` to keep `▶` perfectly centered.
 
 ### Phase 2: Keyboard Shortcuts (Hotkeys)
-- Add a global `keydown` event listener to intercept shortcuts:
-  - `Space` / `K` $\rightarrow$ Play/Pause
-  - `,` / `.` $\rightarrow$ Step -1f / +1f
-  - `Shift + ,` / `Shift + .` $\rightarrow$ Jump -5f / +5f
-  - `M` $\rightarrow$ Toggle Mirror
-  - `G` $\rightarrow$ Toggle Grid
-  - `[` / `]` or `I` / `O` $\rightarrow$ Set Loop Start / End
-- Prevent native YouTube key conflicts with `event.preventDefault()` and `event.stopPropagation()`.
+*Bite-sized implementation checklist to tackle without feeling overwhelmed:*
+- [ ] **Step 1 — Global Listener & Focus Guard:** Add a single capture-phase listener to `window`:
+  ```javascript
+  window.addEventListener("keydown", (e) => {
+      const tag = document.activeElement.tagName.toLowerCase();
+      if (tag === "input" || tag === "textarea" || document.activeElement.isContentEditable) return;
+      // Shortcuts go here...
+  }, true);
+  ```
+- [ ] **Step 2 — Play/Pause:** Intercept `Space` and `k`/`K` with `e.preventDefault()`, `e.stopImmediatePropagation()`, and trigger `play.click()`.
+- [ ] **Step 3 — Frame Stepping:** Intercept `,` (Step -1f) and `.` (Step +1f); check `e.shiftKey` for $\pm 5\text{f}$.
+- [ ] **Step 4 — Mirror & Grid:** Wire `m`/`M` to `mirror.click()` and `g`/`G` to `grid.click()`.
+- [ ] **Step 5 — A-B Looper:** Wire `[` / `i` to `loopStart.click()` and `]` / `o` to `loopEnd.click()`.
 
 ### Phase 3: YouTube Lifecycle & Ad Handling
-- Listen to `yt-navigate-finish` to re-bind video elements when navigating between videos without a full page refresh.
-- Check `.ad-showing` on `#movie_player` to mute/hide HUD during pre-roll ads.
+- [ ] **SPA Navigation Re-binding:** Listen to `yt-navigate-finish` on `window` to re-fetch `document.querySelector("video")` when navigating between videos without a full page refresh.
+- [ ] **Ad Stream Isolation:** Check if `#movie_player` contains `.ad-showing`. Disengage or pause HUD time calculations during pre-roll and mid-roll ads.
+
+### Phase 4: Local Testing & Deployment Verification
+- Open `chrome://extensions/`, enable Developer Mode, click **"Load unpacked"**, and select this repo directory to test live on YouTube.
+- Use the reload button on the extension card after saving changes.
 
 ---
 
