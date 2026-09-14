@@ -30,7 +30,7 @@ let frameCount= document.createElement("div");
 frameCount.textContent = "FRAMES: ";
 frameCount.className = "frame-count";
 let loop = document.createElement("div");
-loop.textContent = "LOOP:"; 
+loop.textContent = "LOOP:   "; 
 loop.className = "loop";// To be utilized with parent property (buttons)
 
 // frameSkip buttons
@@ -45,8 +45,9 @@ plus5f.textContent = "5f";
 
 // frameCount interface
 let currentFrame = document.createElement("span");
+currentFrame.className = "current-frame";
 let endFrame = document.createElement("span");
-
+endFrame.className = "end-frame";
 
 // loop buttons
 let loopStart = document.createElement("button");

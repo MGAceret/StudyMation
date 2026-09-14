@@ -2,16 +2,17 @@
     position: absolute;
     top: 20px;
     left: 20px;
-    width: 40%;
-    height: 10%;
+    width: 45%;
+    height: auto;
     background: rgba(18,18,18,0.85);
     border: 2px solid white;
     border-radius: 5px;
     z-index: 999;
-    padding: 10px;
+    padding: 5px;
     color: white;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
+    gap: 1px;  
 }
 
 .timeline {
@@ -22,6 +23,7 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    gap: 5px;
 }
 
 .play-btn {
@@ -29,8 +31,12 @@
     background: #e9a42d;
     border: 0;
     border-radius: 100px;
-    height: 30px;
-    width: 30px;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
 }
 
 .control2 {
@@ -44,11 +50,21 @@
     border: 0;
     border-radius: 10px;
     padding: 5px;
+    height: 25px;
 }
 
 .frame-skip button {
     color: white;
     background: #616161;
+    border: 0;
+    border-radius: 10px;
+    padding: 5px;
+    height: 25px;
+    width: 25px;
+}
+
+.frame-skip button:not(:last-child) {
+    margin-right: 3px;
 }
 
 .frame-count {
@@ -56,14 +72,43 @@
     border: 0;
     border-radius: 10px;
     padding: 5px;
+    height: 25px;
+    align-content: center;
+}
+
+.current-frame, .end-frame {
+    font-size: 14px;
+}
+
+.current-frame {
+    color: #e9a42d;
+}
+
+.frame-count, .end-frame {
+    color: #616161;
 }
 
 .loop {
-    
+    background: #202020;
+    border: 0;
+    border-radius: 10px;
+    padding: 5px;    
+    height: 25px;
+    align-content: center;
+    color: #616161;
 }
 
 .loop button {
-    
+    color: white;
+    background: #616161;
+    border: 0;
+    border-radius: 10px;
+    padding: 5px;
+    height: 25px;
+}
+
+.loop button:not(:last-child) {
+    margin-right: 5px;
 }
 
 .mirror-btn {
@@ -71,6 +116,7 @@
     background: #616161;
     border: 0;
     border-radius: 10px;
+    height: 25px;
 }
 
 .grid-btn {
@@ -78,6 +124,11 @@
     background: #616161;
     border: 0;
     border-radius: 10px;
+    height: 25px;
+}
+
+.mirror-btn:active, .grid-btn:active {
+    background-color: #e9a42d;
 }
 
 .speed-control {
@@ -85,6 +136,9 @@
     border: 0;
     border-radius: 10px;
     padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .speed-control button {
@@ -92,6 +146,7 @@
     background: #616161;
     border: 0;
     border-radius: 10px;
+    height: 25px;
 }
 
 .animator-grid-overlay {
