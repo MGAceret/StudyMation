@@ -151,8 +151,10 @@ mirror.addEventListener("click", () => {
     if (!video) return;
     if(video.style.transform === "scaleX(-1)") {
         video.style.transform = "none";
+        mirror.className = "mirror-btn";
     } else {
         video.style.transform = "scaleX(-1)";
+        mirror.className = "mirror-btn-active";
     }
 });
 
@@ -172,8 +174,10 @@ grid.addEventListener("click", () => {
     if (!video) return;
     if (gridOverlay.style.display === "none") {
         gridOverlay.style.display = "grid";
+        grid.className = "grid-btn-active";
     } else {
         gridOverlay.style.display = "none";
+        grid.className = "grid-btn";
     }
 });
 
@@ -197,12 +201,19 @@ loopStart.addEventListener("click", () => {
     if (!video) return;
     loopStartTime = video.currentTime;
     loopStart.textContent = "Start: " + loopStartTime.toFixed(2) + "s";
+    loopStart.className = "loop-btn-active";
+    loopClear.disabled = false;
+    if (loopStartTime) {
+        loopEnd.disabled = false;
+    }
 });
 
+loopEnd.disabled = true; // Initial Loading
 loopEnd.addEventListener("click", () => {
     if (!video) return;
     loopEndTime = video.currentTime;
     loopEnd.textContent = "End: " + loopEndTime.toFixed(2) + "s";
+    loopEnd.className = "loop-btn-active";
 });
 
 // Loop Function
@@ -216,12 +227,17 @@ video.addEventListener("timeupdate", () => {
 });
 
 // Loop Clear
+loopClear.disabled = true; // Initial Loading
 loopClear.addEventListener("click", () => {
     if (!video) return;
-    if (loopStartTime && loopEndTime) {
+    if ((loopStartTime && loopEndTime) || (loopStartTime || loopEndTime)) {
         loopStartTime = null;
         loopEndTime = null;
         loopStart.textContent = "Start: --";
         loopEnd.textContent = "End: --";
+        loopStart.className = "";
+        loopEnd.className = "";
+        loopEnd.disabled = true;
+        loopClear.disabled = true;
     }
 });
