@@ -5,7 +5,7 @@ A browser extension (Manifest V3) designed for animators, dance analysts, and st
 
 ---
 
-## 🎯 Current Status (As of Sep 14, 2026)
+## 🎯 Current Status (As of Sep 15, 2026)
 
 ### ✅ Completed & Fully Functional Features:
 
@@ -20,59 +20,57 @@ A browser extension (Manifest V3) designed for animators, dance analysts, and st
        - `timeline` (`<input type="range">`) with native `accent-color: #e9a42d`
        - `control1` (Row 1): `play`, `frameSkip` (`-5f`, `-1f`, `1f`, `5f`), `frameCount` (`currentFrame`, `endFrame`), `loop` (`loopStart`, `loopEnd`, `loopClear`)
        - `control2` (Row 2): `mirror`, `grid`, `speedControl` (`0.25x`, `0.5x`, `1.0x`)
-   - Added dedicated CSS class hooks: `currentFrame.className = "current-frame"` and `endFrame.className = "end-frame"`.
+   - Added dedicated CSS class hooks across all elements.
 
 3. **Core Interactive Engine (`content.js`)**:
    - **Play / Pause**: Toggles `video.play()` and `video.pause()` with synchronized `▶` and `❚❚` icons.
    - **Frame Stepper**: `stepFrames(frames, fps = 24)` nudges `video.currentTime` by $\pm 1\text{f}$ and $\pm 5\text{f}$ with auto-pause.
    - **Playback Speeds**: `setSpeed(rate)` adjusts `video.playbackRate` between `0.25x`, `0.5x`, and `1.0x`.
-   - **Canvas Mirror (Flip X)**: Toggles `video.style.transform = "scaleX(-1)"` on first click and resets to `"none"`.
-   - **Rule of Thirds Grid Overlay**: Injected 9-cell `<div>` CSS grid (`.animator-grid-overlay`) toggled by `Grid [G]` with `pointer-events: none;`.
+   - **Canvas Mirror (Flip X)**: Toggles `video.style.transform = "scaleX(-1)"` and dynamically toggles `.mirror-btn-active`.
+   - **Rule of Thirds Grid Overlay**: Injected 9-cell `<div>` CSS grid (`.animator-grid-overlay`) toggled by `Grid [G]` with `.grid-btn-active` and `pointer-events: none;`.
    - **Live Frame Counter**: Updates `currentFrame` and `endFrame` in real time on `timeupdate` (calculated at 24fps).
-   - **A-B Range Looper**: Captures `loopStartTime` and `loopEndTime`, continuously loops playback within boundary on `timeupdate`, and resets with `loopClear`.
+   - **A-B Range Looper & State Machine**:
+     - `loopStart` captures timestamp, turns gold (`.loop-btn-active`), unlocks `loopEnd.disabled = false`, and unlocks `loopClear.disabled = false`.
+     - `loopEnd` captures timestamp, turns gold (`.loop-btn-active`), and activates bounded looping.
+     - `loopClear` resets timestamps, restores label text, removes active classes, and disables itself and `loopEnd`.
    - **Dynamic Time Scrubber**: `<input type="range">` with 2-way sync that automatically constrains `min`/`max` when an A-B loop is active and expands to `video.duration` when cleared.
 
 4. **Visual Design & CSS Layout (`style/style.css`)**:
-   - Switched `.playback-hud` to `height: auto` to prevent vertical clipping of row 2 (`control2`).
-   - Play button styled with a 45px circular amber accent (`#e9a42d`).
+   - Switched `.playback-hud` to `height: auto` and responsive 3-row grid.
+   - Play button styled with a 40px circular amber accent (`#e9a42d`).
    - Grouped pill containers (`.frame-skip`, `.frame-count`, `.loop`, `.speed-control`) styled with `#202020` backgrounds and `#616161` buttons.
-   - Button spacing handled via `:not(:last-child)` margins.
-   - Two-tone frame counter readout styled: `.current-frame` in amber (`#e9a42d`) and `.end-frame` in muted grey (`#616161`).
-   - `:active` click feedback added for `.mirror-btn` and `.grid-btn`.
+   - Scoped CSS rules (`.loop .loop-btn-active`) to maintain proper selector specificity.
+   - Disabled states styled with `:disabled` and `:nth-child` / `:last-child` selectors (`opacity: 0.5`).
    - Reference mockup: `ref/Animator-Playback.png`.
 
 ---
 
-## 🚀 Next Steps (When Resuming on Other Device)
+## 🚀 Next Priority (For Next Session)
 
-### Phase 1: CSS Quick Polish (Optional Finishing Touches)
-- [ ] **`.loop` Alignment:** Add `display: flex; align-items: center;` to `.loop` in `style/style.css` so `gap: 5px` properly spaces the `"LOOP:"` text and buttons on the same baseline.
-- [ ] **`.frame-skip button` Sizing:** Change fixed `width: 25px` to `min-width: 25px; width: auto; padding: 2px 6px;` if `-5f` / `+5f` text feels cramped.
-- [ ] **Numeric Jitter Prevention:** Add `font-variant-numeric: tabular-nums;` to `.frame-count` so the counter doesn't vibrate horizontally during playback.
-- [ ] **Icon Centering:** Add `display: flex; justify-content: center; align-items: center;` to `.play-btn` to keep `▶` perfectly centered.
+### 🎯 Primary Focus: Playback Speed Active Highlighting
+- [ ] **Default Active State**: On page load, set `speedNormal` (`1.0x`) as the active highlighted button (amber `#e9a42d` background), since standard video playback runs at 1.0x by default.
+- [ ] **Speed Button Group Toggling**:
+  - When a speed button is clicked (`0.25x`, `0.5x`, or `1.0x`), set its class to active (or add an active class).
+  - Remove the active class from the other two speed buttons so only the currently running speed is highlighted in gold.
+- [ ] **CSS Styling for Speed Active**: Add `.speed-control .speed-btn-active` (or scoped equivalent) in `style/style.css` with `#e9a42d` background and transitions.
+
+---
+
+## 🔮 Future Milestones (Queued for Later)
 
 ### Phase 2: Keyboard Shortcuts (Hotkeys)
-*Bite-sized implementation checklist to tackle without feeling overwhelmed:*
-- [ ] **Step 1 — Global Listener & Focus Guard:** Add a single capture-phase listener to `window`:
-  ```javascript
-  window.addEventListener("keydown", (e) => {
-      const tag = document.activeElement.tagName.toLowerCase();
-      if (tag === "input" || tag === "textarea" || document.activeElement.isContentEditable) return;
-      // Shortcuts go here...
-  }, true);
-  ```
-- [ ] **Step 2 — Play/Pause:** Intercept `Space` and `k`/`K` with `e.preventDefault()`, `e.stopImmediatePropagation()`, and trigger `play.click()`.
-- [ ] **Step 3 — Frame Stepping:** Intercept `,` (Step -1f) and `.` (Step +1f); check `e.shiftKey` for $\pm 5\text{f}$.
-- [ ] **Step 4 — Mirror & Grid:** Wire `m`/`M` to `mirror.click()` and `g`/`G` to `grid.click()`.
-- [ ] **Step 5 — A-B Looper:** Wire `[` / `i` to `loopStart.click()` and `]` / `o` to `loopEnd.click()`.
+- [ ] Add global capture-phase `keydown` listener to `window` with focus guard (ignores input/textarea/contentEditable).
+- [ ] Intercept:
+  - `Space` / `K` $\rightarrow$ Play/Pause
+  - `,` / `.` $\rightarrow$ Step $\pm 1\text{f}$ (with `Shift` for $\pm 5\text{f}$)
+  - `M` $\rightarrow$ Toggle Mirror
+  - `G` $\rightarrow$ Toggle Grid
+  - `[` / `I` $\rightarrow$ Loop Start
+  - `]` / `O` $\rightarrow$ Loop End
 
 ### Phase 3: YouTube Lifecycle & Ad Handling
-- [ ] **SPA Navigation Re-binding:** Listen to `yt-navigate-finish` on `window` to re-fetch `document.querySelector("video")` when navigating between videos without a full page refresh.
-- [ ] **Ad Stream Isolation:** Check if `#movie_player` contains `.ad-showing`. Disengage or pause HUD time calculations during pre-roll and mid-roll ads.
-
-### Phase 4: Local Testing & Deployment Verification
-- Open `chrome://extensions/`, enable Developer Mode, click **"Load unpacked"**, and select this repo directory to test live on YouTube.
-- Use the reload button on the extension card after saving changes.
+- [ ] **SPA Navigation Re-binding**: Listen to `yt-navigate-finish` on `window` to re-fetch `document.querySelector("video")` when navigating between videos without a full page refresh.
+- [ ] **Ad Stream Isolation**: Check if `#movie_player` contains `.ad-showing`. Disengage or pause HUD time calculations during pre-roll and mid-roll ads.
 
 ---
 
