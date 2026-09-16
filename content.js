@@ -123,6 +123,9 @@ play.addEventListener("click", () => {
     }
 });
 
+video.addEventListener("play", () => {play.textContent = "❚❚"})
+video.addEventListener("pause", () => {play.textContent = "▶"})
+
 // FrameSkip
 function stepFrames (frames, fps = 24) {
     if (!video) return;
@@ -262,3 +265,83 @@ loopClear.addEventListener("click", () => {
         loopClear.disabled = true;
     }
 });
+
+/* Keyboard Shortcuts */
+// Space = pause and play
+// , . < > = frame skips
+// [ ] = loop start & loop end
+// Esc = loop clear
+// m M = mirror
+// g G = grid
+// - = = toggle speed up/down
+
+window.addEventListener("keydown", (e) => {
+    // If the user is typing on a textfield (e.g. comment section, search bar), DO NOTHING!
+    const tag = document.activeElement.tagName.toLowerCase();
+    if (tag === "input" || tag === "textarea" || document.activeElement.isContentEditable) {
+        return;
+    }
+    
+    switch (e.key) {
+        case "<":
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            minus5f.click();
+            break;
+        case ",":
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            minus1f.click();
+            break;
+        case ".":
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            plus1f.click();   
+            break;                     
+        case ">":
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            plus5f.click();
+            break;
+        case "[":
+            loopStart.click();
+            break;
+        case "]":
+            loopEnd.click();
+            break;
+        case "Escape":
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            loopClear.click();
+            break;        
+        case "m":
+        case "M":
+            e.stopImmediatePropagation();
+            mirror.click();
+        break;
+        case "g":
+        case "G":
+            e.stopImmediatePropagation();
+            grid.click();
+            break;
+        case "-":
+            e.preventDefault()
+            e.stopImmediatePropagation();
+            if (video.playbackRate === 1.0) {
+                speedHalf.click();
+            } else if (video.playbackRate === 0.5) {
+                speedQuarter.click();
+            }
+            break;
+        case "=":
+        case "+":
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            if (video.playbackRate === 0.25) {
+                speedHalf.click();
+            } else if (video.playbackRate === 0.5) {
+                speedNormal.click();
+            }
+            break;
+    }
+}, true)
