@@ -137,14 +137,20 @@ plus5f.addEventListener("click", () => stepFrames(5));
 
 
 // PlayBackSpeed
-function setSpeed (rate) {
+speedNormal.className = "speed-btn-active";    // Initial Loading
+function setSpeed (rate, targetSpeed) {
     if (!video) return;
     video.playbackRate = rate;
+    speedQuarter.className = "";
+    speedHalf.className = "";
+    speedNormal.className = "";
+
+    targetSpeed.className = "speed-btn-active";
 }
 
-speedQuarter.addEventListener("click", () => setSpeed(0.25));
-speedHalf.addEventListener("click", () => setSpeed(0.5));
-speedNormal.addEventListener("click", () => setSpeed(1.0));
+speedQuarter.addEventListener("click", () => setSpeed(0.25, speedQuarter));
+speedHalf.addEventListener("click", () => setSpeed(0.5, speedHalf));
+speedNormal.addEventListener("click", () => setSpeed(1.0, speedNormal));
 
 // Mirror
 mirror.addEventListener("click", () => {
@@ -184,23 +190,38 @@ grid.addEventListener("click", () => {
 // Frame Update 
 video.addEventListener("timeupdate", () => {
     if (!video) return;
-    currentFrame.textContent = Math.floor(video.currentTime * 24);
-     
+    if (loopStartTime && loopEndTime) {
+        currentFrame.textContent = Math.floor((video.currentTime - loopStartTime) * 24);
+    } else {
+        currentFrame.textContent = Math.floor(video.currentTime * 24);
+    }
 });
 
 video.addEventListener("timeupdate", () => {
     if (!video) return;
-    endFrame.textContent = " / " + Math.floor(video.duration * 24);
+    if (loopEndTime) {
+        endFrame.textContent = " / " + Math.floor((loopEndTime - loopStartTime) * 24);
+    } else {
+        endFrame.textContent = " / " + Math.floor(video.duration * 24);
+    }
 });
 
 // Loop Start-End
 let loopStartTime = null;
 let loopEndTime = null;
 
+// Time Formatting
+function formatTime (totalSeconds) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+
+    return `${minutes}:${String(seconds).padStart(2, "0")}`
+}
+
 loopStart.addEventListener("click", () => {
     if (!video) return;
     loopStartTime = video.currentTime;
-    loopStart.textContent = "Start: " + loopStartTime.toFixed(2) + "s";
+    loopStart.textContent = "Start: " + formatTime(loopStartTime);
     loopStart.className = "loop-btn-active";
     loopClear.disabled = false;
     if (loopStartTime) {
@@ -212,7 +233,7 @@ loopEnd.disabled = true; // Initial Loading
 loopEnd.addEventListener("click", () => {
     if (!video) return;
     loopEndTime = video.currentTime;
-    loopEnd.textContent = "End: " + loopEndTime.toFixed(2) + "s";
+    loopEnd.textContent = "End: " + formatTime(loopEndTime);
     loopEnd.className = "loop-btn-active";
 });
 
