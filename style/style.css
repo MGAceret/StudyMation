@@ -165,6 +165,10 @@
     height: 25px;
 }
 
+.speed-control button.speed-btn-active {
+    background-color: #e9a42d;
+}
+
 .animator-grid-overlay {
     position: absolute;
     top: 0;
