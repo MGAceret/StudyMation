@@ -8,6 +8,7 @@ const video = getVideo();
 
 let container = document.createElement("div");
 container.className = "playback-hud";
+container.textContent = "Animator Playback" + " | Now Studying: " + document.title.replace(" - YouTube", "");
 
 let timeline = document.createElement("input");
 timeline.className = "timeline";
