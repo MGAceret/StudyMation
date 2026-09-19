@@ -13,6 +13,9 @@
     display: grid;
     grid-template-rows: 10px 1fr 1fr 1fr;
     gap: 1px;  
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    overflow-x: ellipsis;
 }
 
 .timeline {
@@ -62,6 +65,7 @@
     height: 25px;
     width: 25px;
 }
+
 
 .frame-skip button:active {
     background: #e9a42d;
@@ -167,6 +171,10 @@
 
 .speed-control button.speed-btn-active {
     background-color: #e9a42d;
+}
+
+.frame-skip button:hover, .loop button:not(.loop-btn-active):hover, .mirror-btn:hover, .grid-btn:hover, .speed-control button:not(.speed-btn-active):hover {
+    background: #757575;
 }
 
 .animator-grid-overlay {
