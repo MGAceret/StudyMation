@@ -11,7 +11,7 @@ container.className = "playback-hud";
 
 let header = document.createElement('div');
 header.className = "header";
-header.textContent = "Animator Playback" + " | Now Studying: " + document.title.replace(" - YouTube", "");
+header.textContent = "StudyMation!" + " | Now Studying: " + document.title.replace(" - YouTube", "");
 
 
 let timeline = document.createElement("input");
