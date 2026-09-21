@@ -1,4 +1,12 @@
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../fonts/Ubuntu-Medium.ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+
 .playback-hud {
+    font-family: 'Ubuntu';
     position: absolute;
     top: 20px;
     left: 20px;
@@ -11,11 +19,24 @@
     padding: 5px;
     color: white;
     display: grid;
-    grid-template-rows: 10px 1fr 1fr 1fr;
+    grid-template-rows: 30px 1fr 1fr 1fr;
     gap: 1px;  
     backdrop-filter: blur(8px);
+}
+
+.playback-hud button {
     cursor: pointer;
-    overflow-x: ellipsis;
+    font-weight: 600;
+    font-family: inherit;
+}
+
+.header {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .timeline {
@@ -64,12 +85,7 @@
     padding: 5px;
     height: 25px;
     width: 25px;
-}
-
-
-.frame-skip button:active {
-    background: #e9a42d;
-    transition: 0.2s ease;
+    transition: background 0.3s ease-out; 
 }
 
 .frame-skip button:not(:last-child) {
@@ -114,15 +130,7 @@
     border-radius: 10px;
     padding: 5px;
     height: 25px;
-}
-
-.loop .loop-btn-active {
-    color: white;
-    background: #e9a42d;
-    border: 0;
-    border-radius: 10px;
-    padding: 5px;
-    height: 25px;
+    transition: background ease-in-out 0.3s;
 }
 
 .loop button:not(:last-child) {
@@ -142,15 +150,6 @@
     transition: 0.3s ease;
 }
 
-.mirror-btn-active, .grid-btn-active {
-    color: white;
-    border: 0;
-    border-radius: 10px;
-    height: 25px;
-    background-color: #e9a42d;
-    transition: 0.3s ease;
-}
-
 .speed-control {
     background: #202020;
     border: 0;
@@ -167,16 +166,43 @@
     border: 0;
     border-radius: 10px;
     height: 25px;
+    transition: background ease-in-out 0.3s;
+}
+
+
+
+/* Button Interaction */
+.frame-skip button:hover, .loop button:not(.loop-btn-active):hover, .mirror-btn:hover, .grid-btn:hover, .speed-control button:not(.speed-btn-active):hover {
+    background: #757575;
+}
+
+.frame-skip button.flash {
+    background: #e9a42d;
+}
+
+.loop .loop-btn-active {
+    color: white;
+    background: #e9a42d;
+    border: 0;
+    border-radius: 10px;
+    padding: 5px;
+    height: 25px;
+}
+
+.mirror-btn-active, .grid-btn-active {
+    color: white;
+    border: 0;
+    border-radius: 10px;
+    height: 25px;
+    background-color: #e9a42d;
+    transition: 0.3s ease;
 }
 
 .speed-control button.speed-btn-active {
     background-color: #e9a42d;
 }
 
-.frame-skip button:hover, .loop button:not(.loop-btn-active):hover, .mirror-btn:hover, .grid-btn:hover, .speed-control button:not(.speed-btn-active):hover {
-    background: #757575;
-}
-
+/* Grid Overlay */
 .animator-grid-overlay {
     position: absolute;
     top: 0;
