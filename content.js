@@ -8,7 +8,11 @@ const video = getVideo();
 
 let container = document.createElement("div");
 container.className = "playback-hud";
-container.textContent = "Animator Playback" + " | Now Studying: " + document.title.replace(" - YouTube", "");
+
+let header = document.createElement('div');
+header.className = "header";
+header.textContent = "Animator Playback" + " | Now Studying: " + document.title.replace(" - YouTube", "");
+
 
 let timeline = document.createElement("input");
 timeline.className = "timeline";
@@ -77,7 +81,7 @@ speedNormal.textContent = "1.0x";
 
 document.getElementById("movie_player")?.append(container);
 
-container.append(timeline, control1, control2);
+container.append(header, timeline, control1, control2);
 control1.append(play, frameSkip, frameCount, loop);
 control2.append(mirror, grid, speedControl);
 
@@ -127,6 +131,12 @@ play.addEventListener("click", () => {
 video.addEventListener("play", () => {play.textContent = "❚❚"})
 video.addEventListener("pause", () => {play.textContent = "▶"})
 
+// Add flash to triggered buttons
+function flashButton (btn) {
+    btn.classList.add("flash");
+    setTimeout(() => btn.classList.remove("flash"), 500);
+}
+
 // FrameSkip
 function stepFrames (frames, fps = 24) {
     if (!video) return;
@@ -134,10 +144,24 @@ function stepFrames (frames, fps = 24) {
     video.currentTime += frames / fps;
 };
 
-minus5f.addEventListener("click", () => stepFrames(-5));
-minus1f.addEventListener("click", () => stepFrames(-1));
-plus1f.addEventListener("click", () => stepFrames(1));
-plus5f.addEventListener("click", () => stepFrames(5));
+minus5f.addEventListener("click", () => {
+    stepFrames(-5);
+    flashButton(minus5f);
+});
+minus1f.addEventListener("click", () => {
+    stepFrames(-1);
+    flashButton(minus1f);
+});
+plus1f.addEventListener("click", () => {
+    stepFrames(1);
+    flashButton(plus1f);
+});
+plus5f.addEventListener("click", () => {
+    stepFrames(5);
+    flashButton(plus5f);
+});
+
+
 
 
 // PlayBackSpeed
