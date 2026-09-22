@@ -1,74 +1,101 @@
 <!-- Title + One line description -->
 # StudyMation   
 ### Frame-by-frame study suited for 2D/3D Animators, storyboarders, and choreographers
+
 ---
+
 <!-- Introduction Paragraph -->
 ## Description
-StudyMation is a modified playback of an extension to be used as an overlay for YouTube in order to enhance the learning experience of studying of choreography. scenery, and anything animation-alike.
+StudyMation is a browser extension and precision playback overlay for YouTube designed to enhance the video analysis experience when studying choreography, action scenes, and animation references.
+
 ---
+
 <!-- Features created for users -->
 ## Features
-- Timeline scrubber that updates alongside with registered loop
-- Frameskipping through one and five frames per (tick?)
-- Frame counter which counts the entire video and updates alongside with registered loop
-- Looping execution that allows the video to continously play until it was cleared
-- Mirror to allow flipping the video... (dunno how to exactly explain it)
-- Display grid overlay which is useful for studying ratios. (Golden ratio and whatnot)
-- Speed control to allow slow down fast paced motions
+- **Dynamic Timeline Scrubber:** Automatically bounds to the active Start-End loop points.
+- **Precision Frame Skipping:** Skip forward or backward by ±1 frame or jump by ±5 frames
+- **Relative and Absolute Frame Counter:** Displays live frame numbers currently played, or counts relative cycle progress according to the active loops.
+- **Start-End Range Looper:** Continuously loops a selected segment until it is cleared.
+- **Horizontal Video Flip:** Flips the video on the X-axis with the use of `Mirror` to evaluate composition balance and silhouttes.
+- **Rule of Thirds Grid Overlay:** Injects a 3x3 compositional grid for analyzing framing and staging.
+- **Variable Playback Speeds:** Switch between `0.25x`, `0.5x`, `1.0x` with smooth active transitions. 
+
 ---
+
 <!-- Recommendations -->
 ## Recommendations
-- Ads - The extension will appear on every video however, it was not coded to specifically hide whenever an ad is present. It is best to place a detection to only display once an ad is finished or skipped.
-- Allow the hud to dynamically change position through dragging
-- The hud might be too large for other devices or browsers and would most likely prefer to hide the hud itself for better view. probably only display the frame counter once hidden. 
+- **Ad Awareness:** Currently, the HUD does not automatically hide during the pre-roll ads. It is recommended to use an ad-blocker or wait until the video starts to avoid tracking ad timestamps.
+- **Draggable Positioning (Planned):** Allow repositioning of the HUD anywhere on the video player.
+- **Collapsible to Mini-Mode (Planned):** Provides a compact toggle to minimize the HUD into a slim frame counter for a clearer view.
+
 ---
+
 <!-- Programming Languages used -->
-## Programming Languages
+## Tech Stack
+- **JavaScript** — Pure Vanilla DOM manipulation and Media APIs
+- **CSS** — Design for the HUD
+- **Manifest V3** — Modern Chrome Extension Standard
+
 ---
-- JavaScript
-- CSS
+
 <!-- Directory -->
 ## Project Structure
----
 ```
 StudyMation/
 ├── fonts/                                      
-    └── Ubuntu-Medium.tff                       # Installed font
+    └── Ubuntu-Medium.tff                       # Bundled local font
 ├── style/
     └── style.css                               # Custom CSS Styling
-├── content.js                                  # StudyMation core engine
-├── manifest.json                               # Prerequisite file for initialization
-└── README.md                                   # This file
+├── content.js                                  # Core StudyMation engine & event listeners
+├── manifest.json                               # Manifest V3 extension configuration
+└── README.md                                   # This file (Documentation)
 ```
+
+---
+
 <!-- Shortcut changes -->
 ## Keyboard Shortcut changes
-### What was added
-- **[, ]** - Loop Start and Loop End respectively
-- **Esc** - Clears registered Loop
-- **M / m** - Mirror
-- **G / g** - Grid Overlay
-- **-, =** - Speed toggle up/down
-### What was overwritten
-- **M** - Mute
-- **<, >** - Native Speed toggle
-- **,, .** - Native Frameskip by one frame
+### Extension Shortcuts Added
+| Key | Action |
+| :--- | :--- |
+| **`[`** | Set Loop Start (In) |
+| **`]`** | Set Loop End (Out) |
+| **`Escape`** | Clears Active Loop |
+| **`M` / `m`** | Toggle Mirror (Flip X) |
+| **`G` / `g`** | Toggle Grid Overlay |
+| **`-`** | Decrease Playback Speed |
+| **`=`** | Increase Playback Speed |
+| **`,` / `.`** | Skip -1 / +1 Frame |
+| **`<` / `>`** | Jump -5 / +5 Frames |
+
+### Native YouTube Keys Overriden
+* **`M`** — Replaced native mute with **Toggle Mirror**
+* **`<` / `>`** — Replaced Native speed menu with **±5 Frame Jumps**
+* **`,` / `.`** — Replaced native 1-frame seek with **Custom Frame Skipping** 
+
 ---
+
 <!-- Installation via Local Setup -->
-## Local Usage / Installation
-- You can install and use this extension locally on any chromium-based browser (Google Chrome, Brave, Microsoft Edge, Opera, Vivaldi):
-- 1. Use the terminal and enter this command line:
-```
+## Local Installation & Setup
+You can install and use this extension locally on any chromium-based browser (Google Chrome, Brave, Microsoft Edge, Opera, Vivaldi):
+1. **Clone the repository:**
+``` bash
 git clone https://github.com/MGAceret/Animator-Playback.git
 ```
-- 2. Open extensions page:
-Open your browser and navigate to ```chrome://extensions/``` or ```edge://extensions/``` if you are using Edge.
-- 3. Enable the 'Developer mode'
-- 4. Click the 'Load Unpacked' 
-- 5. Navigate to the cloned repository folder, containing the manifest.json
-- 6. Start studying
-Navigate to any video on YouTube
-The StudyMation HUD will automatically appear upon playing so you can start studying!
+2. Open extensions page:
+Open your browser and navigate to:
+- Chrome / Brave / Opera: ```chrome://extensions/``` 
+- Edge: ```edge://extensions/```
+
+3. Enable the **Developer mode** (toggle in the top-right corner).
+
+4. Click the **Load Unpacked** (top-left corner). 
+5. Select the cloned ```StudyMation``` folder (containing ```manifest.json```).
+6. **Start studying!**
+Navigate to any video on YouTube—the StudyMation HUD will automatically appear over the player!
+
 ---
+
 <!-- Demonstration video or gif -->
 ## Demonstration
 <!-- To be placed here -->
