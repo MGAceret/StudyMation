@@ -98,4 +98,4 @@ Navigate to any video on YouTube—the StudyMation HUD will automatically appear
 
 <!-- Demonstration video or gif -->
 ## Demonstration
-<!-- To be placed here -->
+https://github.com/user-attachments/assets/dbe3792f-8159-4a8e-93ec-933512a4b9be
