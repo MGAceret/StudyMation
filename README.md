@@ -43,7 +43,7 @@ StudyMation is a browser extension and precision playback overlay for YouTube de
 ```
 StudyMation/
 ├── fonts/                                      
-    └── Ubuntu-Medium.tff                       # Bundled local font
+    └── Ubuntu-Medium.ttf                       # Bundled local font
 ├── style/
     └── style.css                               # Custom CSS Styling
 ├── content.js                                  # Core StudyMation engine & event listeners
